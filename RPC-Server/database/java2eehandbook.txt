@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `used_versions` (
+  `used_versions_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `java_4` VARCHAR(50),
+  `java_5` VARCHAR(50),
+  `java_6` VARCHAR(50),
+  `java_7` VARCHAR(50),
+  `java_8` VARCHAR(50),
+  PRIMARY KEY (`used_versions_id`));
+  
+CREATE TABLE IF NOT EXISTS `java_technologies` (
+  `tech_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tech_name` VARCHAR(50),
+  `versions` INT UNSIGNED NOT NULL,
+  `description` VARCHAR(50),
+  PRIMARY KEY (`tech_id`));
+
+INSERT INTO used_versions(java_4, java_5, java_6, java_7, java_8) VALUES("2.1", "3.0", "3.1", "3.2", "3.2") ON DUPLICATE KEY UPDATE java_4="2.1", java_5="3.0", java_6="3.1", java_7="3.2", java_8="3.2";
+
+INSERT INTO java_technologies(tech_name, versions, description) VALUES("EJB", (SELECT used_versions_id FROM used_versions WHERE java_4="2.1" AND java_5="3.0" AND java_6="3.1" AND java_7="3.2" AND java_8="3.2"), "Enterprise JavaBeans") ON DUPLICATE KEY UPDATE tech_name="EJB";
+
+SELECT * FROM java_technologies INNER JOIN used_versions ON java_technologies.versions = used_versions.used_versions_id;
