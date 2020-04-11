@@ -46,14 +46,12 @@ class HandbookHandler implements HandbookService.Iface {
     @Override
     public void addTechnology(JavaEETechnology technology) {
         String SQL;
+        ResultSet rs;
         PreparedStatement preparedStatement;
         try {
-            SQL = "INSERT INTO used_versions(java_4, java_5, java_6, java_7, java_8) \n" +
-                    "VALUES(?, ?, ?, ?, ?)\n" +
-                    "ON DUPLICATE KEY UPDATE java_4=?, java_5=?, java_6=?, java_7=?, java_8=?;";
-
+            SQL = "SELECT used_versions_id FROM used_versions WHERE java_4=? AND java_5=? AND java_6=? AND java_7=? AND java_8=?;";
             try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -68,12 +66,31 @@ class HandbookHandler implements HandbookService.Iface {
             preparedStatement.setString(3, technology.getVersions().getVersionForJava6());
             preparedStatement.setString(4, technology.getVersions().getVersionForJava7());
             preparedStatement.setString(5, technology.getVersions().getVersionForJava8());
-            preparedStatement.setString(6, technology.getVersions().getVersionForJava4());
-            preparedStatement.setString(7, technology.getVersions().getVersionForJava5());
-            preparedStatement.setString(8, technology.getVersions().getVersionForJava6());
-            preparedStatement.setString(9, technology.getVersions().getVersionForJava7());
-            preparedStatement.setString(10, technology.getVersions().getVersionForJava8());
-            preparedStatement.executeUpdate();
+
+            rs = preparedStatement.executeQuery();
+            rs.last();
+            int count = rs.getRow();
+
+            if(count == 0){
+                SQL = "INSERT INTO used_versions(java_4, java_5, java_6, java_7, java_8) \n" +
+                        "VALUES(?, ?, ?, ?, ?)\n" +
+                        "ON DUPLICATE KEY UPDATE java_4=?, java_5=?, java_6=?, java_7=?, java_8=?;";
+
+
+
+                preparedStatement = DriverManager.getConnection(url, user, password).prepareStatement(SQL);
+                preparedStatement.setString(1, technology.getVersions().getVersionForJava4());
+                preparedStatement.setString(2, technology.getVersions().getVersionForJava5());
+                preparedStatement.setString(3, technology.getVersions().getVersionForJava6());
+                preparedStatement.setString(4, technology.getVersions().getVersionForJava7());
+                preparedStatement.setString(5, technology.getVersions().getVersionForJava8());
+                preparedStatement.setString(6, technology.getVersions().getVersionForJava4());
+                preparedStatement.setString(7, technology.getVersions().getVersionForJava5());
+                preparedStatement.setString(8, technology.getVersions().getVersionForJava6());
+                preparedStatement.setString(9, technology.getVersions().getVersionForJava7());
+                preparedStatement.setString(10, technology.getVersions().getVersionForJava8());
+                preparedStatement.executeUpdate();
+            }
 
             SQL = "INSERT INTO java_technologies(tech_name, versions, description)\n" +
                     "VALUES(?,\n" +
@@ -105,7 +122,7 @@ class HandbookHandler implements HandbookService.Iface {
                     "WHERE tech_id=?;";
 
             try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -125,14 +142,12 @@ class HandbookHandler implements HandbookService.Iface {
     @Override
     public void updateTechnology(JavaEETechnology technology) {
         String SQL;
+        ResultSet rs;
         PreparedStatement preparedStatement;
         try {
-            SQL = "INSERT INTO used_versions(java_4, java_5, java_6, java_7, java_8) \n" +
-                    "VALUES(?, ?, ?, ?, ?)\n" +
-                    "ON DUPLICATE KEY UPDATE java_4=?, java_5=?, java_6=?, java_7=?, java_8=?;";
-
+            SQL = "SELECT used_versions_id FROM used_versions WHERE java_4=? AND java_5=? AND java_6=? AND java_7=? AND java_8=?;";
             try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -147,12 +162,29 @@ class HandbookHandler implements HandbookService.Iface {
             preparedStatement.setString(3, technology.getVersions().getVersionForJava6());
             preparedStatement.setString(4, technology.getVersions().getVersionForJava7());
             preparedStatement.setString(5, technology.getVersions().getVersionForJava8());
-            preparedStatement.setString(6, technology.getVersions().getVersionForJava4());
-            preparedStatement.setString(7, technology.getVersions().getVersionForJava5());
-            preparedStatement.setString(8, technology.getVersions().getVersionForJava6());
-            preparedStatement.setString(9, technology.getVersions().getVersionForJava7());
-            preparedStatement.setString(10, technology.getVersions().getVersionForJava8());
-            preparedStatement.executeUpdate();
+
+            rs = preparedStatement.executeQuery();
+            rs.last();
+            int count = rs.getRow();
+
+            if(count == 0){
+                SQL = "INSERT INTO used_versions(java_4, java_5, java_6, java_7, java_8) \n" +
+                        "VALUES(?, ?, ?, ?, ?)\n" +
+                        "ON DUPLICATE KEY UPDATE java_4=?, java_5=?, java_6=?, java_7=?, java_8=?;";
+
+                preparedStatement = DriverManager.getConnection(url, user, password).prepareStatement(SQL);
+                preparedStatement.setString(1, technology.getVersions().getVersionForJava4());
+                preparedStatement.setString(2, technology.getVersions().getVersionForJava5());
+                preparedStatement.setString(3, technology.getVersions().getVersionForJava6());
+                preparedStatement.setString(4, technology.getVersions().getVersionForJava7());
+                preparedStatement.setString(5, technology.getVersions().getVersionForJava8());
+                preparedStatement.setString(6, technology.getVersions().getVersionForJava4());
+                preparedStatement.setString(7, technology.getVersions().getVersionForJava5());
+                preparedStatement.setString(8, technology.getVersions().getVersionForJava6());
+                preparedStatement.setString(9, technology.getVersions().getVersionForJava7());
+                preparedStatement.setString(10, technology.getVersions().getVersionForJava8());
+                preparedStatement.executeUpdate();
+            }
 
             SQL = "UPDATE java_technologies\n" +
                     "SET tech_name=?, versions=(SELECT used_versions_id\n" +

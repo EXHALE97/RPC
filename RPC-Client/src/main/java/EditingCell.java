@@ -67,6 +67,8 @@ class EditingCell extends TableCell<XYChart.Data, String> {
                 controller.removeRow(this.controller.javaTechnologiesTable.getSelectionModel().getSelectedItem());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();
+            } else if (t.getCode() == KeyCode.F1) {
+                commitEdit(textField.getText());
             }
         });
     }
